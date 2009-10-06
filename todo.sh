@@ -49,6 +49,7 @@ shorthelp()
         del|rm NUMBER [TERM]
         dp|depri NUMBER
         do NUMBER
+        edit|e
         help
         list|ls [TERM...]
         listall|lsa [TERM...]
@@ -114,6 +115,11 @@ help()
 
         do NUMBER[, NUMBER, NUMBER, ...]
           Marks item(s) on line NUMBER as done in todo.txt.
+
+        edit [\$EDITOR options]
+        e [\$EDITOR options]
+          Launch \$EDITOR on your todo file. Arguments following
+          'edit' will be passed to \$EDITOR.
 
         help
           Display this help message.
@@ -785,6 +791,13 @@ case $action in
         archive
     fi
     cleanup ;;
+
+"edit" | "e" )
+    shift;
+    if [ "$EDITOR" == "" ]; then
+        die "Error: \$EDITOR is not set."
+    fi
+    $EDITOR ${TODO_FILE} $* ;;
 
 "help" )
     help
